@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Books - Library Management System{% endblock %}
+{% block page_title %}Book Management{% endblock %}
+
+{% block content %}
+<div class="page-toolbar">
+    <h2 class="section-title">All Books</h2>
+    <a href="{% url 'add_book' %}" class="btn btn-primary">+ Add Book</a>
+</div>
+
+<div class="card filter-card">
+    <div class="card-body">
+        <form method="get" class="filter-form">
+            <input type="text" name="q" value="{{ query }}" class="input-field" placeholder="Search by title, author, ISBN or category">
+            <select name="category" class="select-field">
+                <option value="">All Categories</option>
+                {% for value, label in categories %}
+                    <option value="{{ value }}" {% if value == selected_category %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            <select name="author" class="select-field">
+                <option value="">All Authors</option>
+                {% for a in authors %}
+                    <option value="{{ a }}" {% if a == selected_author %}selected{% endif %}>{{ a }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body no-padding">
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>ISBN</th>
+                        <th>Category</th>
+                        <th>Publisher</th>
+                        <th>Year</th>
+                        <th>Qty</th>
+                        <th>Available</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in page_obj %}
+                    <tr>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.isbn }}</td>
+                        <td><span class="badge badge-secondary">{{ book.category }}</span></td>
+                        <td>{{ book.publisher }}</td>
+                        <td>{{ book.publication_year }}</td>
+                        <td>{{ book.quantity }}</td>
+                        <td>
+                            {% if book.available_quantity > 0 %}
+                                <span class="badge badge-success">{{ book.available_quantity }}</span>
+                            {% else %}
+                                <span class="badge badge-danger">0</span>
+                            {% endif %}
+                        </td>
+                        <td class="action-cell">
+                            <a href="{% url 'edit_book' book.pk %}" class="btn btn-small btn-outline-secondary">Edit</a>
+                            <button type="button" class="btn btn-small btn-outline-danger" onclick="openModal('deleteBookModal{{ book.pk }}')">Delete</button>
+                        </td>
+                    </tr>
+
+                    <div class="modal-overlay" id="deleteBookModal{{ book.pk }}">
+                        <div class="modal-box">
+                            <h3 class="modal-title">Confirm Delete</h3>
+                            <p>Are you sure you want to delete <strong>{{ book.title }}</strong>? This action cannot be undone.</p>
+                            <div class="modal-actions">
+                                <button type="button" class="btn btn-outline-secondary" onclick="closeModal('deleteBookModal{{ book.pk }}')">Cancel</button>
+                                <form method="post" action="{% url 'delete_book' book.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <tr><td colspan="9" class="empty-row">No books found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% include 'includes/pagination.html' %}
+{% endblock %}

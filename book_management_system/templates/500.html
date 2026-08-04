@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Server Error</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="error-page">
+        <div class="error-box error-box-danger">
+            <span class="error-icon">&#9888;</span>
+            <h1>500</h1>
+            <h4>Internal Server Error</h4>
+            <p class="muted-text">Something went wrong on our end. Please try again later.</p>
+            <a href="/dashboard/" class="btn btn-danger">Go to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

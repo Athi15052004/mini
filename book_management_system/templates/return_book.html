@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Return Book - Library Management System{% endblock %}
+{% block page_title %}Return Book{% endblock %}
+
+{% block content %}
+<div class="card form-card">
+    <div class="card-header">Return Book</div>
+    <div class="card-body">
+        <table class="detail-table">
+            <tr>
+                <th>Book</th>
+                <td>{{ borrow.book.title }}</td>
+            </tr>
+            <tr>
+                <th>Student</th>
+                <td>{{ borrow.student.name }} ({{ borrow.student.register_number }})</td>
+            </tr>
+            <tr>
+                <th>Issue Date</th>
+                <td>{{ borrow.issue_date }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>
+                    {% if borrow.is_overdue %}
+                        <span class="badge badge-danger">Overdue</span>
+                    {% else %}
+                        <span class="badge badge-warning">Issued</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="form-group checkbox-group">
+                {{ form.confirm }}
+                <label for="{{ form.confirm.id_for_label }}">{{ form.confirm.label }}</label>
+                {{ form.confirm.errors }}
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Confirm Return</button>
+                <a href="{% url 'issue_book' %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Issue / Return Books - Library Management System{% endblock %}
+{% block page_title %}Issue &amp; Return Books{% endblock %}
+
+{% block content %}
+<div class="issue-layout">
+    <div class="card form-card issue-form-card">
+        <div class="card-header">Issue a Book</div>
+        <div class="card-body">
+            <form method="post" action="{% url 'issue_book' %}" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label">Student</label>
+                    {{ form.student }}
+                    {{ form.student.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Book</label>
+                    {{ form.book }}
+                    {{ form.book.errors }}
+                    <small class="form-hint">Only books with available copies can be issued.</small>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Issue Book</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="issue-list-column">
+        <div class="card">
+            <div class="card-header">Currently Issued / Returned Books</div>
+            <div class="card-body no-padding">
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Book</th>
+                                <th>Student</th>
+                                <th>Issue Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for borrow in page_obj %}
+                            <tr>
+                                <td>{{ borrow.book.title }}</td>
+                                <td>{{ borrow.student.name }}</td>
+                                <td>{{ borrow.issue_date }}</td>
+                                <td>
+                                    {% if borrow.status == 'Issued' %}
+                                        {% if borrow.is_overdue %}
+                                            <span class="badge badge-danger">Overdue</span>
+                                        {% else %}
+                                            <span class="badge badge-warning">Issued</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="badge badge-success">Returned</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if borrow.status == 'Issued' %}
+                                        <a href="{% url 'return_book' borrow.pk %}" class="btn btn-small btn-outline-primary">Return</a>
+                                    {% else %}
+                                        <span class="muted-text">—</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="5" class="empty-row">No borrow records yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% include 'includes/pagination.html' %}
+    </div>
+</div>
+{% endblock %}

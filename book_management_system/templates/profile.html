@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Profile - Library Management System{% endblock %}
+{% block page_title %}Admin Profile{% endblock %}
+
+{% block content %}
+<div class="card form-card">
+    <div class="card-header">Profile Details</div>
+    <div class="card-body">
+        <table class="detail-table">
+            <tr>
+                <th>Username</th>
+                <td>{{ user_obj.username }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user_obj.email|default:"—" }}</td>
+            </tr>
+            <tr>
+                <th>First Name</th>
+                <td>{{ user_obj.first_name|default:"—" }}</td>
+            </tr>
+            <tr>
+                <th>Last Name</th>
+                <td>{{ user_obj.last_name|default:"—" }}</td>
+            </tr>
+            <tr>
+                <th>Staff Status</th>
+                <td>
+                    {% if user_obj.is_staff %}
+                        <span class="badge badge-success">Staff</span>
+                    {% else %}
+                        <span class="badge badge-secondary">Regular</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Last Login</th>
+                <td>{{ user_obj.last_login|default:"—" }}</td>
+            </tr>
+            <tr>
+                <th>Date Joined</th>
+                <td>{{ user_obj.date_joined }}</td>
+            </tr>
+        </table>
+        <p class="form-hint">To change your password, use the Django admin panel at <code>/admin/</code>.</p>
+    </div>
+</div>
+{% endblock %}

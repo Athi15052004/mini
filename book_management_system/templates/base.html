@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Library Management System{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+{% if user.is_authenticated %}
+<div class="app-wrapper">
+
+    <!-- Fixed Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-logo">&#128218;</span>
+            <span class="sidebar-title">College Library</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <a href="{% url 'dashboard' %}"><span class="menu-icon">&#9635;</span><span class="menu-text">Dashboard</span></a>
+            </li>
+            <li class="{% if request.resolver_match.url_name == 'book_list' %}active{% endif %}">
+                <a href="{% url 'book_list' %}"><span class="menu-icon">&#128214;</span><span class="menu-text">Books</span></a>
+            </li>
+            <li class="{% if request.resolver_match.url_name == 'student_list' %}active{% endif %}">
+                <a href="{% url 'student_list' %}"><span class="menu-icon">&#127891;</span><span class="menu-text">Students</span></a>
+            </li>
+            <li class="{% if request.resolver_match.url_name == 'issue_book' %}active{% endif %}">
+                <a href="{% url 'issue_book' %}"><span class="menu-icon">&#8646;</span><span class="menu-text">Issue / Return</span></a>
+            </li>
+            <li class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                <a href="{% url 'profile' %}"><span class="menu-icon">&#9786;</span><span class="menu-text">Profile</span></a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="main-content" id="mainContent">
+        <!-- Top Navigation Bar -->
+        <header class="topbar">
+            <button id="sidebarToggle" class="btn-toggle" type="button" aria-label="Toggle sidebar">&#9776;</button>
+            <h1 class="topbar-title">{% block page_title %}Dashboard{% endblock %}</h1>
+            <div class="topbar-user">
+                <span class="user-icon">&#128100;</span>
+                <span class="user-name">{{ user.username }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-small">Logout</a>
+            </div>
+        </header>
+
+        <main class="page-content">
+            {% if messages %}
+                <div class="message-list">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            <span>{{ message }}</span>
+                            <button type="button" class="alert-close" onclick="this.parentElement.style.display='none';">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+{% else %}
+    {% if messages %}
+        <div class="message-list guest-messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <span>{{ message }}</span>
+                    <button type="button" class="alert-close" onclick="this.parentElement.style.display='none';">&times;</button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% block guest_content %}{% endblock %}
+{% endif %}
+
+<script src="{% static 'js/script.js' %}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

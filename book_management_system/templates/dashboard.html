@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Library Management System{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dash-grid">
+    <div class="dash-card card-blue">
+        <span class="dash-icon">&#128218;</span>
+        <div>
+            <h3>{{ total_books }}</h3>
+            <p>Total Books</p>
+        </div>
+    </div>
+    <div class="dash-card card-green">
+        <span class="dash-icon">&#9989;</span>
+        <div>
+            <h3>{{ available_books }}</h3>
+            <p>Available Books</p>
+        </div>
+    </div>
+    <div class="dash-card card-orange">
+        <span class="dash-icon">&#128214;</span>
+        <div>
+            <h3>{{ issued_books }}</h3>
+            <p>Issued Books</p>
+        </div>
+    </div>
+    <div class="dash-card card-teal">
+        <span class="dash-icon">&#8630;</span>
+        <div>
+            <h3>{{ returned_books }}</h3>
+            <p>Returned Books</p>
+        </div>
+    </div>
+    <div class="dash-card card-red">
+        <span class="dash-icon">&#127891;</span>
+        <div>
+            <h3>{{ total_students }}</h3>
+            <p>Total Students</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Recent Activities</div>
+    <div class="card-body no-padding">
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Student</th>
+                        <th>Issue Date</th>
+                        <th>Return Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity in recent_activities %}
+                    <tr>
+                        <td>{{ activity.book.title }}</td>
+                        <td>{{ activity.student.name }}</td>
+                        <td>{{ activity.issue_date }}</td>
+                        <td>{{ activity.return_date|default:"—" }}</td>
+                        <td>
+                            {% if activity.status == 'Issued' %}
+                                <span class="badge badge-warning">Issued</span>
+                            {% else %}
+                                <span class="badge badge-success">Returned</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" class="empty-row">No activity yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

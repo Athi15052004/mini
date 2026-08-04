@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Edit Book - Library Management System{% endblock %}
+{% block page_title %}Edit Book{% endblock %}
+
+{% block content %}
+<div class="card form-card">
+    <div class="card-header">Edit Book - {{ book.title }}</div>
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    {{ form.title }}
+                    {{ form.title.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Author</label>
+                    {{ form.author }}
+                    {{ form.author.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">ISBN</label>
+                    {{ form.isbn }}
+                    {{ form.isbn.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    {{ form.category }}
+                    {{ form.category.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Publisher</label>
+                    {{ form.publisher }}
+                    {{ form.publisher.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Publication Year</label>
+                    {{ form.publication_year }}
+                    {{ form.publication_year.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Total Quantity</label>
+                    {{ form.quantity }}
+                    {{ form.quantity.errors }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Available Quantity</label>
+                    {{ form.available_quantity }}
+                    {{ form.available_quantity.errors }}
+                </div>
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-error">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Update Book</button>
+                <a href="{% url 'book_list' %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
